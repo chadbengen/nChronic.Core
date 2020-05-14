@@ -4,6 +4,10 @@
     <TargetFrameworks>netcoreapp1.1;netstandard2.0</TargetFrameworks>
     <AssemblyName>Chronic.Core</AssemblyName>
     <RootNamespace>Chronic.Core</RootNamespace>
+    <PackageId>ChronicParser</PackageId>
+    <Authors>ChronicParser</Authors>
+    <Product>ChronicParser</Product>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
