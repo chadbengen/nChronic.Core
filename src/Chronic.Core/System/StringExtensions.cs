@@ -29,9 +29,9 @@ namespace Chronic.Core.System
             return @this.Substring(@this.Length - numberOfCharsToTake);
         }
 
-        public static string Numerize(this string @this)
+        public static string Numerize(this string @this, bool intendingTime)
         {
-            return Numerizer.Numerize(@this);
+            return Numerizer.Numerize(@this, intendingTime);
         }
     }
 }

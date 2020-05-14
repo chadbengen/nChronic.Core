@@ -59,7 +59,7 @@ namespace Chronic.Core.Tests
                     {
                         var numerizedString = Numerize(expectedResult, phrase);
                         var number = ConvertToNumber(expectedResult, numerizedString, phrase);
-                        Assert.Equal(expectedResult, number);                    
+                        Assert.Equal(expectedResult, number);
                     });
         }
 
@@ -81,7 +81,7 @@ namespace Chronic.Core.Tests
                     {
                         // Use pre_normalize here instead of Numerizer directly because
                         // pre_normalize deals with parsing 'second' appropriately
-                        Assert.Equal(r, Tokenizer.Normalize(r));
+                        Assert.Equal(r, Tokenizer.Normalize(r, false));
                     });
         }
 
@@ -89,7 +89,7 @@ namespace Chronic.Core.Tests
         public void test_edges()
         {
             Assert.Equal(
-                "27 Oct 2006 7:30am", Numerizer.Numerize("27 Oct 2006 7:30am"));
+                "27 Oct 2006 7:30am", Numerizer.Numerize("27 Oct 2006 7:30am", true));
         }
 
         static int ConvertToNumber(int r, string numerizedString, string s)
@@ -112,7 +112,7 @@ namespace Chronic.Core.Tests
             string numerizedInput = null;
             try
             {
-                numerizedInput = Numerizer.Numerize(s);
+                numerizedInput = Numerizer.Numerize(s, false);
             }
             catch (Exception ex)
             {

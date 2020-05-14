@@ -17,6 +17,10 @@ namespace Chronic.Core
 
         public string OriginalPhrase { get; set; }
         public DayOfWeek FirstDayOfWeek { get; set; }
+        /// <summary>
+        /// Indicates that the parser should intend to parse the result as a datetime object.
+        /// </summary>
+        public bool IntendingTime { get; set; }
 
         public Options()
         {
@@ -24,6 +28,7 @@ namespace Chronic.Core
             EndianPrecedence = EndianPrecedence.Middle;
             Clock = () => DateTime.Now;
             FirstDayOfWeek = DayOfWeek.Sunday;
+            IntendingTime = true;
         }
     }
 }

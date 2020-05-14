@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Chronic.Core.System;
 using Chronic.Core.Tags;
 using Chronic.Core.Tags.Repeaters;
@@ -34,7 +35,7 @@ namespace Chronic.Core
             options.OriginalPhrase = phrase;
             Logger.Log(() => phrase);
 
-            phrase = Normalize(phrase);
+            phrase = Normalize(phrase, options.IntendingTime);
             Logger.Log(() => phrase);
 
             var tokens = TokenizeInternal(phrase, options);
@@ -45,14 +46,14 @@ namespace Chronic.Core
             return taggedTokens;
         }
 
-        public static string Normalize(string phrase)
+        public static string Normalize(string phrase, bool intendingTime)
         {
             var normalized = phrase.ToLower();
             normalized = normalized
                 .ReplaceAll(@"([/\-,@])", " " + "$1" + " ")
                 .ReplaceAll(@"['""\.,]", "")
                 .ReplaceAll(@"\bsecond (of|day|month|hour|minute|second)\b", "2nd $1")
-                .Numerize()
+                .Numerize(intendingTime)
                 .ReplaceAll(@" \-(\d{4})\b", " tzminus$1")
                 .ReplaceAll(@"(?:^|\s)0(\d+:\d+\s*pm?\b)", "$1")
                 .ReplaceAll(@"\btoday\b", "this day")
