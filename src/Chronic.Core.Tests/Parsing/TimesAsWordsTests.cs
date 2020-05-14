@@ -60,6 +60,12 @@ namespace Chronic.Core.Tests.Parsing
         {
             Parse("today one oh five pm").AssertStartsAt(Time.New(Now(), 13, 5, 0));
         }
+        
+        [Fact]
+        public void today_at_one_five_pm()
+        {
+            Parse("today one five pm").AssertStartsAt(Time.New(Now(), 13, 5, 0));
+        }
 
         [Fact]
         public void today_loop_minutes()

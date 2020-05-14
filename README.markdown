@@ -24,6 +24,27 @@ parser.Parse("may 27th");
   // => Sat May 27 12:00:00 PDT 2000
 ```
 
+## Enhancements ##
+This version enhances time parsing to include colloquial time, including the use of the letter 'o' or 'oh' when expressing a time like 1:05 PM. 
+
+
+```csharp
+DateTime.Now; 
+  //=> Sun Aug 27 23:18:25 PDT 2006
+
+var parser = new Parser();
+parser.Parse("today at one fifteen pm");
+  // => Mon Aug 28 13:15:00 PDT 2006
+  
+var parser = new Parser();
+parser.Parse("tomorrow at one five pm");
+  // => Mon Aug 29 13:05:00 PDT 2006  
+  
+var parser = new Parser();
+parser.Parse("tomorrow at one o five pm");
+  // => Mon Aug 29 13:05:00 PDT 2006
+```
+
 ## Credits ##
 This is a port of https://github.com/mojombo/chronic inspired by https://github.com/samtingleff/jchronic. Please see those projects for further credits.
 
