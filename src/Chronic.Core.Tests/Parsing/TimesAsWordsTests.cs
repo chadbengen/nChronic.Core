@@ -50,9 +50,19 @@ namespace Chronic.Core.Tests.Parsing
             Parse("today at one fifteen am").AssertStartsAt(Time.New(Now(), 1, 15, 0));
         }
         [Fact]
+        public void today_at_one_twenty_one_am()
+        {
+            Parse("today at one twenty one am").AssertStartsAt(Time.New(Now(), 1, 21, 0));
+        }
+        [Fact]
+        public void today_at_one_twenty_dash_one_am()
+        {
+            Parse("today at one twenty-one am").AssertStartsAt(Time.New(Now(), 1, 21, 0));
+        }
+        [Fact]
         public void today_at_one_o_five()
         {
-            Parse("today one o five").AssertStartsAt(Time.New(Now(), 1, 5, 0));
+            Parse("today one o five").AssertStartsAt(Time.New(Now(), 13, 5, 0));
         }
 
         [Fact]
@@ -60,11 +70,29 @@ namespace Chronic.Core.Tests.Parsing
         {
             Parse("today one oh five pm").AssertStartsAt(Time.New(Now(), 13, 5, 0));
         }
-        
+
         [Fact]
         public void today_at_one_five_pm()
         {
             Parse("today one five pm").AssertStartsAt(Time.New(Now(), 13, 5, 0));
+        }
+
+        [Fact]
+        public void today_at_one_fifty_five_pm()
+        {
+            Parse("today one fifty five pm").AssertStartsAt(Time.New(Now(), 13, 55, 0));
+        }
+
+        [Fact]
+        public void today_at_one_fifty_five_ten_pm()
+        {
+            Parse("today one fifty five ten pm").AssertStartsAt(Time.New(Now(), 13, 55, 10));
+        }
+
+        [Fact]
+        public void today_at_one_fifty_five_fifty_nine_pm()
+        {
+            Parse("today one fifty five fifty nine pm").AssertStartsAt(Time.New(Now(), 13, 55, 59));
         }
 
         [Fact]

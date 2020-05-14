@@ -8,6 +8,24 @@ namespace Chronic.Core
     {
         static readonly dynamic[,] DIRECT_NUMS = new dynamic[,]
             {
+                {"o one", "01"},
+                {"o two", "02"},
+                {"o three", "03"},
+                {@"o four(\W|$)", "04$1"},
+                {"o five", "05"},
+                {@"o six(\W|$)", "06$1"},
+                {@"o seven(\W|$)", "07$1"},
+                {@"o eight(\W|$)", "08$1"},
+                {@"o nine(\W|$)", "09$1"},
+                {"oh one", "01"},
+                {"oh two", "02"},
+                {"oh three", "03"},
+                {@"oh four(\W|$)", "04$1"},
+                {"oh five", "05"},
+                {@"oh six(\W|$)", "06$1"},
+                {@"oh seven(\W|$)", "07$1"},
+                {@"oh eight(\W|$)", "08$1"},
+                {@"oh nine(\W|$)", "09$1"},
                 {"eleven", "11"},
                 {"twelve", "12"},
                 {"thirteen", "13"},
@@ -34,54 +52,6 @@ namespace Chronic.Core
                 // doesn"t make sense for an "a" at the end to be a 1
             };
 
-        static readonly dynamic[,] DIRECT_NUMS_FOR_TIME = new dynamic[,]
-           {
-                {"o one", "01"},
-                {"o two", "02"},
-                {"o three", "03"},
-                {@"o four(\W|$)", "04$1"},
-                // The weird regex is so that it matches four but not fourty
-                {"o five", "05"},
-                {@"o six(\W|$)", "06$1"},
-                {@"o seven(\W|$)", "07$1"},
-                {@"o eight(\W|$)", "08$1"},
-                {@"o nine(\W|$)", "09$1"},
-                {"oh one", "01"},
-                {"oh two", "02"},
-                {"oh three", "03"},
-                {@"oh four(\W|$)", "04$1"},
-                // The weird regex is so that it matches four but not fourty
-                {"oh five", "05"},
-                {@"oh six(\W|$)", "06$1"},
-                {@"oh seven(\W|$)", "07$1"},
-                {@"oh eight(\W|$)", "08$1"},
-                {@"oh nine(\W|$)", "09$1"},
-                {"eleven", "11"},
-                {"twelve", "12"},
-                {"thirteen", "13"},
-                {"fourteen", "14"},
-                {"fifteen", "15"},
-                {"sixteen", "16"},
-                {"seventeen", "17"},
-                {"eighteen", "18"},
-                {"nineteen", "19"},
-                {"ninteen", "19"}, // Common mis-spelling
-                {"zero", "0"},
-                {"one", "01"},
-                {"two", "02"},
-                {"three", "03"},
-                {@"four(\W|$)", "04$1"},
-                // The weird regex is so that it matches four but not fourty
-                {"five", "05"},
-                {@"six(\W|$)", "06$1"},
-                {@"seven(\W|$)", "07$1"},
-                {@"eight(\W|$)", "08$1"},
-                {@"nine(\W|$)", "09$1"},
-                {"ten", "10"},
-                {@"\ba[\b^$]", "1"}
-               // doesn"t make sense for an "a" at the end to be a 1
-           };
-   
         static readonly dynamic[,] ORDINALS = new dynamic[,]
             {
                 {"first", "1"},
@@ -120,6 +90,8 @@ namespace Chronic.Core
         public static string Numerize(string value, bool intendTime)
         {
             var result = value;
+            string pattern;
+            MatchCollection matches;
 
             // preprocess
             result = @" +|([^\d])-([^\d])".Compile().Replace(result, "$1 $2");
@@ -129,9 +101,7 @@ namespace Chronic.Core
 
             // easy/direct replacements
 
-            var NUMS = intendTime ? DIRECT_NUMS_FOR_TIME : DIRECT_NUMS;
-            
-            NUMS.ForEach<string, string>(
+            DIRECT_NUMS.ForEach<string, string>(
                 (p, r) =>
                     result =
                     Regex.Replace(
@@ -165,7 +135,7 @@ namespace Chronic.Core
             TEN_PREFIXES.ForEach<string, int>(
                 (p, r) => result = Regex.Replace(result, p, prefix + r.ToString()));
 
-            
+
             if (intendTime)
             {
                 var tens = result.Split(new string[] { "<ten>" }, StringSplitOptions.None);
@@ -178,18 +148,29 @@ namespace Chronic.Core
                 }
                 result = newResult;
 
-                string temp = "<num>";
-                var tempIndex = result.IndexOf(temp);
-                if (tempIndex > -1)
+                pattern = @"<num>\b(0*(?:[0-9][0-9]?))\b";
+                matches = Regex.Matches(result, pattern);
+                if (matches.Count > 0)
                 {
-                    string str = result.Substring(0, tempIndex + temp.Length);
-                    result = str + result.Substring(str.Length).Replace(temp, ":").Replace(": ", ":").Replace(" :", ":");
+                    for (int i = matches.Count - 1; i > 0; i--)
+                    {
+                        dynamic match = matches[i];
+                        var index = match.Groups[1].Index;
+                        if (match.Groups[1].Value.Length == 1)
+                        {
+                            result = result.Insert(index, "0");
+                        }
+                        result = result.Insert(index, ":");
+                        var length = " <num>".Length;
+                        result = result.Remove(index - length, length);
+                    }
                 }
             }
             else
             {
                 result = result.Replace("<ten>", "");
             }
+
             // hundreds, thousands, millions, etc.
 
             BIG_PREFIXES.ForEach<string, long>(
@@ -206,26 +187,6 @@ namespace Chronic.Core
             result = Regex.Replace(result, @"(\d +)(?: |and | -)*haAlf", match => (float.Parse(match.Groups[1].Value) + 0.5).ToString());
             result = result.Replace("<num>", "");
 
-
-            var pattern = @"(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)\s(pm|am)?";
-
-            var matches = Regex.Match(result, pattern);
-            if (matches.Success)
-            {
-                foreach(dynamic match in matches.Captures)
-                {
-                    if (match.Success)
-                    {
-                        if (match.Value.EndsWith("am") || match.Value.EndsWith("pm"))
-                        {
-                            string time = match.Value;
-                            string replaced = time.TrimStart('0');
-                            result = result.Replace(time, replaced);
-                        }
-                    }
-                }
-            }
-            
             return result;
         }
 
