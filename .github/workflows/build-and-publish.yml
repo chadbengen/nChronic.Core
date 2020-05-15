@@ -23,7 +23,7 @@ jobs:
       working-directory: src
       run: dotnet build --configuration Release
     - name: Create the packages
-      working-directory: src
+      working-directory: src/Chronic.Core
       run: dotnet pack --configuration Release
     - name: Publish the packages
       working-directory: src
