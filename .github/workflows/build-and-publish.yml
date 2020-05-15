@@ -26,4 +26,5 @@ jobs:
       working-directory: src
       run: dotnet pack --configuration Release
     - name: Publish the packages
+      working-directory: src
       run: dotnet nuget push **/*.nupkg --skip-duplicate -k ${NUGET_KEY} -s https://api.nuget.org/v3/index.json -n true
