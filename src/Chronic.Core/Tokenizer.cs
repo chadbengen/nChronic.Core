@@ -54,6 +54,7 @@ namespace Chronic.Core
                 .ReplaceAll(@"['""\.,]", "")
                 .ReplaceAll(@"\bsecond (of|day|month|hour|minute|second)\b", "2nd $1")
                 .Numerize(intendingTime)
+                .CleanAmPm()
                 .ReplaceAll(@" \-(\d{4})\b", " tzminus$1")
                 .ReplaceAll(@"(?:^|\s)0(\d+:\d+\s*pm?\b)", "$1")
                 .ReplaceAll(@"\btoday\b", "this day")

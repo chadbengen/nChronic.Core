@@ -206,4 +206,35 @@ namespace Chronic.Core
             return result;
         }
     }
+
+    public static class AmPmCleaner
+    {
+        
+        public static string Clean(string input)
+        {
+            if (input.EndsWith(" a m."))
+            {
+                input = input.Remove(input.Length - " a m".Length) + " am.";
+            }
+            else if (input.EndsWith(" p m."))
+            {
+                input = input.Remove(input.Length - " a m".Length) + " pm.";
+            }
+            else if (input.EndsWith(" a m"))
+            {
+                input = input.Remove(input.Length - " a m".Length) + " am";
+            }
+            else if (input.EndsWith(" p m"))
+            {
+                input = input.Remove(input.Length - " a m".Length) + " pm";
+            }
+
+            input = input.Replace(" a.m.", "am");
+            input = input.Replace(" p.m.", "pm");
+            input = input.Replace(" a m ", " am ");
+            input = input.Replace(" p m ", " pm ");
+
+            return input;
+        }
+    }
 }

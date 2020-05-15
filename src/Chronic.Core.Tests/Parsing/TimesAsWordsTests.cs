@@ -94,6 +94,21 @@ namespace Chronic.Core.Tests.Parsing
         {
             Parse("today one fifty five fifty nine pm").AssertStartsAt(Time.New(Now(), 13, 55, 59));
         }
+        [Fact]
+        public void P_space_M()
+        {
+            Parse("today at six fifty-five P M").AssertStartsAt(Time.New(Now(), 18, 55, 0));
+        }
+        [Fact]
+        public void P_space_M_space()
+        {
+            Parse("today at six fifty-five P M ").AssertStartsAt(Time.New(Now(), 18, 55, 0));
+        }
+        [Fact]
+        public void P_dot_M_dot()
+        {
+            Parse("today at six fifty-five P.M.").AssertStartsAt(Time.New(Now(), 18, 55, 0));
+        }
 
         [Fact]
         public void today_loop_minutes()

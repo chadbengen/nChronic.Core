@@ -33,5 +33,9 @@ namespace Chronic.Core.System
         {
             return Numerizer.Numerize(@this, intendingTime);
         }
+        public static string CleanAmPm(this string @this)
+        {
+            return AmPmCleaner.Clean(@this);
+        }
     }
 }
